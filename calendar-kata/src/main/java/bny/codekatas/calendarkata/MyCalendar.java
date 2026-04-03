@@ -24,6 +24,8 @@ import java.time.LocalTime;
 import java.time.Month;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.TimeZone;
 
 import org.eclipse.collections.api.RichIterable;
@@ -93,7 +95,13 @@ public class MyCalendar
      */
     public boolean hasOverlappingMeeting(LocalDate date, LocalTime startTime, Duration duration)
     {
-        return false;
+        var incomingInterval = Interval.of(LocalDateTime.of(date, startTime).atZone(this.getZoneId()).toInstant(), duration);
+        var meetingsForDate = this.getMeetingsForDate(date);
+        return meetingsForDate
+                .anySatisfyWith(
+                        (meeting, o) -> meeting
+                                .getInterval()
+                                .overlaps(incomingInterval), meetingsForDate);
     }
 
     /**
@@ -109,7 +117,38 @@ public class MyCalendar
      */
     public MutableList<Interval> getAvailableTimeslots(LocalDate date)
     {
-        return Lists.mutable.empty();
+        var availableTimeslots = Lists.mutable.<Interval>empty();
+        var meetingsForDate = this.getMeetingsForDate(date);
+        var firstSlotStart = date.atTime(LocalTime.MIN).atZone(getZoneId()).toInstant();
+        var lastSlotEnd = date.atTime(LocalTime.MAX).atZone(getZoneId()).toInstant();
+
+        if(meetingsForDate.isEmpty()){
+            availableTimeslots.add(Interval.of(firstSlotStart, lastSlotEnd));
+        }
+
+        Interval slotInterval = Interval.of(firstSlotStart, firstSlotStart);
+        meetingsForDate.injectInto(slotInterval, ((interval, meeting) -> {
+            var meetingStartInstant = date.atTime(meeting.getStartTime()).atZone(getZoneId()).toInstant();
+            var meetingEndInstant = date.atTime(meeting.getEndTime()).atZone(getZoneId()).toInstant();
+
+            var availableTimeslot = Interval.of(interval.getEnd(), meetingStartInstant);
+            if(interval.getStart().isBefore(meetingStartInstant)){
+                availableTimeslots.add(availableTimeslot);
+            }
+            return Interval.of(meetingEndInstant, meetingEndInstant);
+        }));
+
+        var lastMeetingOpt = meetingsForDate.getLastOptional();
+
+        if(lastMeetingOpt.isPresent()){
+            var lastMeeting = lastMeetingOpt.get();
+            var lastSlotStart = date.atTime(lastMeeting.getEndTime()).atZone(getZoneId()).toInstant();
+            if(lastSlotStart.isBefore(lastSlotEnd)){
+                availableTimeslots.add(Interval.of(lastSlotStart, lastSlotEnd));
+            }
+        }
+
+        return availableTimeslots;
     }
 
     @Override

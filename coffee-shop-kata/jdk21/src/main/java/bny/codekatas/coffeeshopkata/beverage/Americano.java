@@ -16,7 +16,7 @@
 
 package bny.codekatas.coffeeshopkata.beverage;
 
-public class Americano implements CoffeeDrink
+public final class Americano implements CoffeeDrink
 {
     private final DrinkTemperature drinkTemperature;
 

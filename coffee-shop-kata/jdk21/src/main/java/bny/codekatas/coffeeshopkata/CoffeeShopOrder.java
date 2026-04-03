@@ -16,6 +16,9 @@
 
 package bny.codekatas.coffeeshopkata;
 
+import bny.codekatas.coffeeshopkata.food.*;
+
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -46,7 +49,31 @@ public class CoffeeShopOrder
         // TODO: Implement the receipt generation logic here.
         // Hint: look at the Java 8 implementation in the jdk8 module,
         // and the link above to see how record patterns can be utilized here
-        return "";
+        double total = 0.0;
+        List<String> receiptItems = new ArrayList<>();
+
+        for (Item item : this.orderItems)
+        {
+            if (item instanceof Donut(DonutType donutType))
+            {
+                receiptItems.add("Donut: " + donutType + " $" + item.getPrice());
+                total += item.getPrice();
+            }
+            else if (item instanceof Bagel(BagelType bagelType, var spreadType, var toasted))
+            {
+                receiptItems.add("Bagel: " + bagelType + " $" + item.getPrice());
+                total += item.getPrice();
+            }
+            else if (item instanceof Cookie(CookieType cookieType, var warmed))
+            {
+
+                receiptItems.add("Cookie: " + cookieType + " $" + item.getPrice());
+                total += item.getPrice();
+            }
+        }
+        receiptItems.add("Total: $" + total);
+
+        return String.join("\n", receiptItems);
     }
 
     /**
@@ -63,10 +90,17 @@ public class CoffeeShopOrder
      */
     public List<String> getFoodItemsForOrder()
     {
-        // TODO: implement method
-        // Hint: look at the Java 8 implementation in the jdk8 module,
-        // and the link above to see how pattern matching for switch can be utilized here
-        return Collections.emptyList();
+        List<String> foodItems = new ArrayList<>();
+        for (Item item : this.orderItems)
+        {
+            switch (item){
+                case Bagel bagel -> foodItems.add(bagel.bagelType() + " bagel with " + bagel.spreadType());
+                case Donut donut -> foodItems.add(donut.donutType() + " donut");
+                case Cookie cookie -> foodItems.add(cookie.cookieType() + " cookie");
+                default -> {}
+            }
+        }
+        return foodItems;
     }
 
     /**

@@ -33,9 +33,9 @@ public class FullMonth extends CalendarWindow
      */
     public FullMonth(LocalDate forDate, SortedSetMultimap<LocalDate, Meeting> calendarMeetings)
     {
-        LocalDate start = null;
-        LocalDate end = null;
-        this.range = null;
+        LocalDate start = forDate.withDayOfMonth(1);
+        LocalDate end = forDate.withDayOfMonth(forDate.lengthOfMonth());
+        this.range = LocalDateRange.of(start, end);
         this.meetings = calendarMeetings.selectKeysValues(
                 (date, meeting) ->
                         date.getMonth().equals(start.getMonth()) &&

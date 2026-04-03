@@ -66,16 +66,14 @@ public class CoffeeShopTest
     @Test
     public void testBagelRecord()
     {
-        // TODO: Convert Bagel to record
         Bagel bagel2 = new Bagel(EVERYTHING, HERB_GARLIC_CREAM_CHEESE, true);
         assertTrue(Bagel.class.isRecord());
         assertEquals(bagel1, bagel2);
         assertEquals("Bagel[bagelType=EVERYTHING, spreadType=HERB_GARLIC_CREAM_CHEESE, toasted=true]", bagel1.toString());
 
-        // TODO: Convert assertions to use Record getters
-        assertTrue(bagel1.isToasted());
-        assertEquals(bagel1.getBagelType(), EVERYTHING);
-        assertEquals(bagel1.getSpreadType(), HERB_GARLIC_CREAM_CHEESE);
+        assertTrue(bagel1.toasted());
+        assertEquals(EVERYTHING, bagel1.bagelType());
+        assertEquals(HERB_GARLIC_CREAM_CHEESE, bagel1.spreadType());
     }
 
     @Test
@@ -103,7 +101,6 @@ public class CoffeeShopTest
     @Test
     public void testSealedClasses()
     {
-        // TODO: Convert Coffee Drink to sealed class
         assertTrue(CoffeeDrink.class.isSealed());
         assertFalse(Americano.class.isSealed());
         assertFalse(Macchiato.class.isSealed());

@@ -21,7 +21,7 @@ import bny.codekatas.coffeeshopkata.beverage.DrinkTemperature;
 import bny.codekatas.coffeeshopkata.beverage.FlavorSyrup;
 import bny.codekatas.coffeeshopkata.beverage.MilkType;
 
-public class Latte implements CoffeeDrink
+public final class Latte implements CoffeeDrink
 {
     private final MilkType milkType;
     private final boolean extraFoam;

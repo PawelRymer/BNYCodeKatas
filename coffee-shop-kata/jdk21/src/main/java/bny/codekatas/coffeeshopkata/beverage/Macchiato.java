@@ -16,7 +16,7 @@
 
 package bny.codekatas.coffeeshopkata.beverage;
 
-public class Macchiato implements CoffeeDrink
+public final class Macchiato implements CoffeeDrink
 {
     private final MilkType milkType;
     private final FlavorSyrup flavorSyrup;
