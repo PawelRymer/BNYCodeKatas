@@ -16,11 +16,13 @@
 
 package bny.codekatas.coffeeshopkata;
 
+import bny.codekatas.coffeeshopkata.beverage.*;
 import bny.codekatas.coffeeshopkata.food.*;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class CoffeeShopOrder
 {
@@ -116,7 +118,14 @@ public class CoffeeShopOrder
      */
     public List<String> getDrinksForOrder()
     {
-        // TODO: implement method logic here
-        return Collections.emptyList();
+        List<Beverage> beverages = List.of(
+                new Americano(DrinkTemperature.HOT),
+                new Latte(FlavorSyrup.CARAMEL, MilkType.ALMOND_MILK, false, DrinkTemperature.HOT),
+                new Macchiato(MilkType.WHOLE_MILK, FlavorSyrup.VANILLA, DrinkTemperature.HOT),
+                new Tea(TeaType.MATCHA)
+                );
+
+
+        return beverages.stream().map(Beverage::toString).collect(Collectors.toList());
     }
 }

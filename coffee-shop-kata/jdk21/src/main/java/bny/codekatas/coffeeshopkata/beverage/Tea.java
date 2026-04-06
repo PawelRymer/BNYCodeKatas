@@ -16,27 +16,13 @@
 
 package bny.codekatas.coffeeshopkata.beverage;
 
-import bny.codekatas.coffeeshopkata.beverage.Beverage;
-import bny.codekatas.coffeeshopkata.beverage.TeaType;
-
-public class Tea implements Beverage
+public record Tea (TeaType teaType) implements Beverage
 {
-    private final TeaType teaType;
-
-    public Tea(TeaType teaType)
-    {
-        this.teaType = teaType;
-    }
 
     @Override
     public double getPrice()
     {
         return 1.50;
-    }
-
-    public TeaType getTeaType()
-    {
-        return teaType;
     }
 
     @Override

@@ -18,7 +18,8 @@ package bny.codekatas.coffeeshopkata.beverage;
 
 import bny.codekatas.coffeeshopkata.Item;
 
-public interface Beverage extends Item
+public sealed interface Beverage extends Item
+        permits CoffeeDrink, Tea
 {
 
 }
