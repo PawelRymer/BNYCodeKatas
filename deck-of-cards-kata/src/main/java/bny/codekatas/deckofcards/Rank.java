@@ -47,7 +47,6 @@ public enum Rank
 
     public Card of(Suit suit)
     {
-        // TODO Replace null with appropriate call to Card constructor
-        return null;
+        return new Card(this, suit);
     }
 }

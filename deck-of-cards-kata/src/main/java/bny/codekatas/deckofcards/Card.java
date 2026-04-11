@@ -16,6 +16,7 @@
 
 package bny.codekatas.deckofcards;
 
+import java.util.EnumSet;
 import java.util.Set;
 import java.util.stream.Stream;
 
@@ -30,23 +31,29 @@ public record Card(Rank rank, Suit suit) implements Comparable<Card>
      */
     public static LazyIterable<Card> lazyCards()
     {
-        // TODO Return the cartesian product of Rank and Suit as a LazyIterable using Eclipse Collections
-        // Hint: Check out Sets.cartesianProduct linked above
-        return null;
+        return Sets.cartesianProduct(
+                EnumSet.allOf(Rank.class),
+                EnumSet.allOf(Suit.class),
+                Card::new);
     }
 
     public static Stream<Card> streamCards()
     {
-        // TODO Return the cartesian product of Rank and Suit as a Java Stream
-        // Hint: Check out flatMap() and map() on Stream
-        return null;
+        return EnumSet.allOf(Rank.class)
+                .stream()
+                .flatMap(rankVal -> EnumSet.allOf(Suit.class)
+                        .stream()
+                        .map(rankVal::of));
     }
 
     @Override
     public int compareTo(Card other)
     {
-        // TODO Use Comparator.comparing() to compare card by Suit and then Rank
-        return 0;
+        int suitComparingResult = this.suit.compareTo(other.suit);
+        if(suitComparingResult == 0){
+            return this.rank.compareTo(other.rank);
+        }
+        return suitComparingResult;
     }
 
     @Override
