@@ -22,13 +22,15 @@ import org.eclipse.collections.api.set.ImmutableSet;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.util.stream.Stream;
+
 public class KataOfKatasTest
 {
     @Test
     void groupKatasByTechnologies()
     {
         // Group all of the katas by Technology
-        ImmutableSetMultimap<Technology, Kata> techToKatas = null;
+        ImmutableSetMultimap<Technology, Kata> techToKatas = Kata.ALL.groupByEach(Kata::getTechnologies);
 
         Assertions.assertEquals(
                 Sets.mutable.with(Kata.DECK_OF_CARDS, Kata.DONUT),
@@ -42,7 +44,8 @@ public class KataOfKatasTest
     void intersectKatasForKotlinAndScala()
     {
         // Find the katas that are common between Kotlin and Scala
-        ImmutableSet<Kata> intersect = null;
+        ImmutableSetMultimap<Language, Kata> langToKatas = Kata.ALL.groupByEach(Kata::getLanguages);
+        ImmutableSet<Kata> intersect = langToKatas.get(Language.KOTLIN).intersect(langToKatas.get(Language.SCALA));
 
         Assertions.assertEquals(Sets.mutable.with(Kata.DECK_OF_CARDS), intersect);
     }
@@ -51,7 +54,8 @@ public class KataOfKatasTest
     void intersectKatasForKotlinAndEclipseCollections()
     {
         // Find the katas that are common between Kotlin and Eclipse Collections
-        ImmutableSet<Kata> intersect = null;
+        ImmutableSetMultimap<Technology, Kata> techToKatas = Kata.ALL.groupByEach(Kata::getTechnologies);
+        ImmutableSet<Kata> intersect = techToKatas.get(Language.KOTLIN).intersect(techToKatas.get(Library.ECLIPSE_COLLECTIONS));
 
         Assertions.assertEquals(
                 Sets.mutable.with(Kata.DONUT, Kata.DECK_OF_CARDS), intersect);
@@ -61,7 +65,8 @@ public class KataOfKatasTest
     void intersectKatasForJavaStreamAndEclipseCollections()
     {
         // Find the katas that are common between Java Streams and Eclipse Collections
-        ImmutableSet<Kata> intersect = null;
+        ImmutableSetMultimap<Library, Kata> libToKatas = Kata.ALL.groupByEach(Kata::getLibraries);
+        ImmutableSet<Kata> intersect = libToKatas.get(Library.JAVA_STREAM).intersect(libToKatas.get(Library.ECLIPSE_COLLECTIONS));
 
         Assertions.assertEquals(
                 Sets.mutable.with(Kata.DECK_OF_CARDS, Kata.PET, Kata.JAVA_LAMBDA, Kata.CODE_POINT, Kata.TOP_METHODS),
@@ -72,7 +77,7 @@ public class KataOfKatasTest
     void countKatasByLanguages()
     {
         // Count the Katas by Language
-        ImmutableBag<Language> languages = null;
+        ImmutableBag<Language> languages = Kata.ALL.countByEach(Kata::getLanguages);
 
         Assertions.assertEquals(
                 Language.JAVA,
@@ -83,7 +88,7 @@ public class KataOfKatasTest
     void countKatasByLibraries()
     {
         // Count the Katas by Library
-        ImmutableBag<Library> libraries = null;
+        ImmutableBag<Library> libraries = Kata.ALL.countByEach(Kata::getLibraries);
 
         Assertions.assertEquals(
                 Library.ECLIPSE_COLLECTIONS,

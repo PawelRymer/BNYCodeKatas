@@ -18,6 +18,11 @@ package bny.codekatas.kataofkatas;
 import org.eclipse.collections.api.factory.Sets;
 import org.eclipse.collections.api.set.ImmutableSet;
 
+import java.util.HashSet;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 public enum Kata
 {
     PET(Language.JAVA, Language.PYTHON, Library.ECLIPSE_COLLECTIONS, Library.JAVA_STREAM),
@@ -44,14 +49,17 @@ public enum Kata
     public ImmutableSet<Language> getLanguages()
     {
         // Select instances of Language from this.technologies
-        throw new UnsupportedOperationException("Need to implement getLanguages");
+//        throw new UnsupportedOperationException("Need to implement getLanguages");
+        return this.technologies.selectInstancesOf(Language.class);
     }
 
     public ImmutableSet<Library> getLibraries()
     {
         // Select instances of Library from this.technologies
-        throw new UnsupportedOperationException("Need to implement getLibraries");
+//        throw new UnsupportedOperationException("Need to implement getLibraries");
+        return this.technologies.selectInstancesOf(Library.class);
     }
+
 
     public ImmutableSet<Technology> getTechnologies()
     {
