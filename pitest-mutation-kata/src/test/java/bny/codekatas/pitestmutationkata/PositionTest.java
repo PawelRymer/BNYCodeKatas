@@ -33,6 +33,8 @@ public class PositionTest
         Assertions.assertEquals(20, position.getValueTwo());
         Assertions.assertEquals(30, position.getValueThree());
         Assertions.assertEquals(0, position.getAdditionCounter());
+
+        Assertions.assertEquals(POSITION_ID, position.getPositionId());
     }
 
     @Test
@@ -40,9 +42,15 @@ public class PositionTest
     {
         Position position = this.newPosition();
         Position positionTwo = new Position("id2", 2, 100, 200, 300);
-        position.add(positionTwo);
-        Assertions.assertEquals(110, position.getValueOne());
-        Assertions.assertEquals(220, position.getValueTwo());
+        Position positionThree = this.newPosition();
+
+        position.add(positionTwo).add(positionThree);
+        Assertions.assertEquals(120, position.getValueOne());
+        Assertions.assertEquals(240, position.getValueTwo());
+
+        Assertions.assertEquals(2, position.getAdditionCounter());
+        Assertions.assertEquals(12, position.getQuantity());
+        Assertions.assertEquals(360, position.getValueThree());
     }
 
     @Test
@@ -52,6 +60,7 @@ public class PositionTest
         Position positionTwo = this.newPosition();
         Verify.assertEqualsAndHashCode(positionOne, positionTwo);
         Assertions.assertNotEquals(positionOne, new Position("id2", 0, 0, 0, 0));
+        Assertions.assertNotEquals(positionOne.hashCode(), new Position("id2", 0, 0, 0, 0).hashCode());
     }
 
     private Position newPosition()
