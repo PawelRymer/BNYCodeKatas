@@ -138,35 +138,44 @@ public class DonutShop
         // Hint: Look at the domain and use deliveries which have collections of ordered donuts
         // Hint: You will need to flatten the donuts and collect their donut types
         // Hint: Bag has a method named topOccurrences(n)
-        return null;
+        return this.deliveries
+                .flatCollect(Delivery::donuts)
+                .countBy(Donut::type)
+                .topOccurrences(n);
     }
 
     public double getTotalDeliveryValueFor(LocalDate date)
     {
         // TODO - Write the code necessary to sum up the total delivery value for the specified date
         // Hint: Look at sumOfDouble()
-        return 0.0d;
+        return this.deliveries
+                .selectWith(Delivery::deliveredOn, date)
+                .sumOfDouble(Delivery::getTotalPrice);
     }
 
     public Customer getTopCustomer()
     {
         // TODO - Write the code necessary to find the max Customer by total donuts ordered
         // Hint: There is a method maxBy on all RichIterables
-        return null;
+        return this.customers.maxBy(Customer::getTotalDonutsOrdered);
     }
 
     public Multimap<DonutType, Customer> getCustomersByDonutTypesOrdered()
     {
         // TODO - Group all of the Customers by the Donut Types they order
         // Hint: There is a method groupByEach which takes a function which returns Iterable
-        return null;
+        return this.customers.groupByEach(Customer::getDonutTypesOrdered);
     }
 
     public DoubleSummaryStatistics getDonutPriceStatistics(LocalDate fromDate, LocalDate toDate)
     {
         // TODO - Calculate the DoubleSummaryStatistics for the deliveries inclusive of the specified date range.
         // Hint: Look at select(), flatCollect() and summarizeDouble()
-        return null;
+        return this.deliveries
+                .select(delivery -> (delivery.deliveredOn(fromDate) || delivery.getDate().isAfter(fromDate)))
+                .select(delivery -> (delivery.deliveredOn(toDate) || delivery.getDate().isBefore(toDate)))
+                .flatCollect(Delivery::donuts)
+                .summarizeDouble(Donut::price);
     }
 
     @Override

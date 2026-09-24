@@ -123,23 +123,26 @@ class DonutShop
         // Hint: Look at the domain and use deliveries which have collections of ordered donuts
         // Hint: You will need to flatten the donuts and collect their donut types
         // Hint: Bag has a method named topOccurrences(n)
-        return null
+        return this.deliveries
+            .flatCollect { each -> each.donuts }
+            .countBy{ each -> each.type }
+            .topOccurrences(n)
     }
 
     fun getTotalDeliveryValueFor(date: LocalDate): Double
     {
         // TODO - Write the code necessary to sum up the total delivery value for the specified date
         // Hint: Look at sumOfDouble()
-        return 0.0
+        return this.deliveries.select { each -> each.deliveredOn(date) }.sumOfDouble { each -> each.totalPrice }
     }
 
     val topCustomer: Customer?
-        get() = null
+        get() = this.customers.maxBy { each -> each.totalDonutsOrdered }
         // TODO - Write the code necessary to find the max Customer by total donuts ordered
         // Hint: There is a method maxBy on all RichIterables
 
     val customersByDonutTypesOrdered: Multimap<DonutType, Customer>?
-        get() = null
+        get() = this.customers.groupByEach { each -> each.donutTypesOrdered };
         // TODO - Group all of the Customers by the Donut Types they order
         // Hint: There is a method groupByEach which takes a function which returns Iterable
 
@@ -148,7 +151,7 @@ class DonutShop
     {
         // TODO - Calculate the DoubleSummaryStatistics for the deliveries inclusive of the specified date range.
         // Hint: Look at select(), flatCollect() and summarizeDouble()
-        return null
+        return this.deliveries.select { each -> each.date in fromDate..toDate }.flatCollect { each -> each.donuts }.summarizeDouble { each -> each.price }
     }
 
     override fun toString(): String
